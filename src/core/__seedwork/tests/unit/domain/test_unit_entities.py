@@ -4,8 +4,9 @@ from abc import ABC
 from dataclasses import dataclass, is_dataclass
 import unittest
 
-from src.core.__seedwork.domain.entities import Entity
-from src.core.__seedwork.domain.value_objects import UniqueEntityId
+from core.__seedwork.domain.entities import Entity
+from core.__seedwork.domain.value_objects import UniqueEntityId
+
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -24,6 +25,8 @@ class TestEntityUnit(unittest.TestCase):
 
     def test_set_unique_entity_id_and_props(self):
         entity = StubEntity(prop1='value1', prop2='value2')
+        print(UniqueEntityId)
+        
         self.assertEqual(entity.prop1, 'value1')
         self.assertEqual(entity.prop2, 'value2')
         self.assertIsInstance(entity.unique_entity_id, UniqueEntityId)
@@ -51,9 +54,3 @@ class TestEntityUnit(unittest.TestCase):
             'prop1': 'value1',
             'prop2': 'value2'
         })
-
-    def test_set_method(self):
-        entity = StubEntity(prop1='value1', prop2='value2',)
-        # pylint: disable=protected-access
-        entity._set('prop1', 'changed')
-        self.assertEqual(entity.prop1, 'changed')

@@ -5,8 +5,10 @@ from dataclasses import FrozenInstanceError, dataclass, is_dataclass
 import unittest
 from unittest.mock import patch
 import uuid
-from src.core.__seedwork.domain.exceptions import InvalidUuidException
-from src.core.__seedwork.domain.value_objects import UniqueEntityId, ValueObject
+from core.__seedwork.domain.exceptions import InvalidUuidException
+
+from core.__seedwork.domain.value_objects import UniqueEntityId, ValueObject
+
 
 
 @dataclass(frozen=True)
@@ -42,6 +44,11 @@ class TestValueObjectUnit(unittest.TestCase):
 
         vo2 = StubTwoProp(prop1='value1', prop2='value2')
         self.assertEqual('{"prop1": "value1", "prop2": "value2"}', str(vo2))
+
+    def test_is_immutable(self):
+        with self.assertRaises(FrozenInstanceError):
+            value_object = StubOneProp(prop='value')
+            value_object.prop = 'fake'
 
 
 class TestUniqueEntityIdUnit(unittest.TestCase):
@@ -79,7 +86,7 @@ class TestUniqueEntityIdUnit(unittest.TestCase):
         value_object = UniqueEntityId(uuid_value)
         self.assertEqual(value_object.id, str(uuid_value))
 
-    def test_generate_id_when_no_passed_id_in_constructor(self):  # pylint: disable=no-self-use
+    def test_generate_id_when_no_passed_id_in_constructor(self):
         with patch.object(
             UniqueEntityId,
             '_UniqueEntityId__validate',
@@ -90,3 +97,7 @@ class TestUniqueEntityIdUnit(unittest.TestCase):
             uuid.UUID(value_object.id)
             mock_validate.assert_called_once()
 
+    def test_is_immutable(self):
+        with self.assertRaises(FrozenInstanceError):
+            value_object = UniqueEntityId()
+            value_object.id = 'fake id'
