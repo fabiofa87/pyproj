@@ -15,9 +15,6 @@ class Category(Entity):
         default_factory=lambda: datetime.now()
     )
 
-    def _set(self, attr: str, value: str):
-        object.__setattr__(self, attr, value)
-
     def update(self, name: str, description: Optional[str] = None):
         self._set('name', name)
         self._set('description', description)
